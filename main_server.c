@@ -6,7 +6,7 @@
 /*   By: edogarci <edogarci@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 10:34:50 by edogarci          #+#    #+#             */
-/*   Updated: 2023/12/15 11:40:09 by edogarci         ###   ########.fr       */
+/*   Updated: 2023/12/15 12:22:05 by edogarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ void	f_print_pid(int pid)
 	int		len;
 	char	c;
 
+	if (pid == 0)
+	{
+		write(STDOUT_FILENO, "Error. PID es 0.\n", 17);
+		exit(1);
+	}
 	write(STDOUT_FILENO, "SERVER PID: ", 12);
 	len = f_get_pid_len(pid);
 	while (pid > 0)
@@ -47,11 +52,6 @@ void	f_print_pid(int pid)
 		write(STDOUT_FILENO, &c, 1);
 		pid = pid % len;
 		len = len / 10;
-	}
-	else
-	{
-		write(STDOUT_FILENO, "Error. PID es 0.", 16);
-		exit(1).
 	}
 	write(STDOUT_FILENO, "\n", 1);
 }
@@ -66,33 +66,20 @@ void	f_sig_handler(int sig)
 	static char	c;
 	static int	cont;
 
-	printf("cont %d...", cont);
 	if (cont < 8)
 	{
 		if (sig == SIGUSR2)
-		{
 			c = (c * 2) + 1;
-/* 			write(STDOUT_FILENO, "0", 1); */
-			printf("0");
-		}
 		else
-		{
 			c = c * 2;
-/* 			write(STDOUT_FILENO, "1", 1); */
-			printf("1");
-		}
 		cont++;
 	}
 	if (cont == 8)
 	{
-/* 		printf("%c\n\n", c); */
+		write(STDOUT_FILENO, &c, 1);
 		cont = 0;
-		printf("letra %c...", c);
 		c = 0;
-		printf("\n");
-		printf("\n");
 	}
-	printf("\n");
 }
 
 /*
